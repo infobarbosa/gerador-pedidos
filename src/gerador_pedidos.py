@@ -2,6 +2,7 @@ import random
 import datetime
 import json
 import boto3
+import sys
 import time
 import uuid
 from faker import Faker
@@ -43,20 +44,31 @@ def gerar_pedido_aleatorio():
     id_cliente = fake.unique.random_number(digits=5)
     return PedidoDeCompra(produto, valor_unitario, quantidade, data_criacao, pais, id_cliente)
 
-def main():
-    kinesis = boto3.client('kinesis')  
-    stream_name = 'pedidos'  
+def main(destino="arquivo"):
 
-    while True:  # loop infinito
-        pedidos = [gerar_pedido_aleatorio() for _ in range(50)]  # gera 50 pedidos
-        for pedido in pedidos:
-            kinesis.put_record(
-                StreamName=stream_name,
-                Data=json.dumps(pedido.to_dict()),
-                PartitionKey=str(pedido.id_pedido)
-            )
-        time.sleep(1)  # pausa por 1 segundo
+    if destino == "arquivo":
+        arquivo = open("pedidos.txt", "w")  # abre o arquivo para escrita
+        for _ in range(50):  # gera 50 pedidos
+            pedido = gerar_pedido_aleatorio()
+            arquivo.write(json.dumps(pedido.to_dict()) + "\n")  # escreve o pedido no arquivo
+        arquivo.close()  # fecha o arquivo
+    elif destino == "kinesis":
+        kinesis = boto3.client('kinesis')  
+        stream_name = 'pedidos'  
+
+        while True:  # loop infinito
+            pedidos = [gerar_pedido_aleatorio() for _ in range(50)]  # gera 50 pedidos
+            for pedido in pedidos:
+                kinesis.put_record(
+                    StreamName=stream_name,
+                    Data=json.dumps(pedido.to_dict()),
+                    PartitionKey=str(pedido.id_pedido)
+                )
+            time.sleep(1)  # pausa por 1 segundo
 
 if __name__ == '__main__':
-    main()  # chamada da função principal
-        
+    if len(sys.argv) > 1:  # verifica se algum argumento foi passado
+        destino = sys.argv[1]  # usa o primeiro argumento como destino
+        main(destino)  
+    else:
+        main()
