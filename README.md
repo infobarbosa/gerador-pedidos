@@ -1,10 +1,33 @@
-# Empacotando e Instalando a Função Lambda na AWS
+Criado por: Prof. Marcelo Barbosa
+Criado em: Janeiro/2024
+Github: https://github.com/infobarbosa
+Linkedin: https://www.linkedin.com/in/infobarbosa/
+
+### Pré-requisitos
+- Os comandos a seguir presumem um ambiente e terminal ativos do AWS Cloud9.
+- Python e pip instalados.
+
+# 01. Criando a stream `pedidos`
+```
+aws kinesis create-stream --stream-name pedidos --shard-count 1
+```
+
+# 02. Clonando o projeto
+
+1. No console, faça o clone do projeto com o comando a seguir:
+```
+git clone https://github.com/infobarbosa/gerador-pedidos-lambda.git
+```
+
+2. Navegue para o diretório `gerador-pedidos-lambda`:
+```
+cd gerador-pedidos-lambda/ 
+```
+
+# 03. Empacotando e instalando a função lambda na AWS
 
 Este guia irá orientá-lo sobre como empacotar sua função Lambda com suas dependências e como implantá-la na AWS.
 
-### Pré-requisitos
-- AWS CLI instalada e configurada com suas credenciais da AWS.
-- Python e pip instalados.
 ### Empacotando a Função Lambda
 1. Navegue até a raiz do projeto no terminal.
 
@@ -36,3 +59,12 @@ aws lambda update-function-code --function-name my-function --zip-file fileb://f
 ```
 
 Agora, sua função Lambda está pronta para ser usada na AWS.
+
+# 04. Lendo os dados da stream `pedidos`
+
+1. No console instale os pacotes `boto3` e `faker`
+```
+pip install boto3 faker
+```
+
+2. 
