@@ -16,12 +16,12 @@ aws kinesis create-stream --stream-name pedidos --shard-count 1
 
 1. No console, faça o clone do projeto com o comando a seguir:
 ```
-git clone https://github.com/infobarbosa/gerador-pedidos-lambda.git
+git clone https://github.com/infobarbosa/gerador-pedidos.git
 ```
 
-2. Navegue para o diretório `gerador-pedidos-lambda`:
+2. Navegue para o diretório `gerador-pedidos`:
 ```
-cd gerador-pedidos-lambda/ 
+cd gerador-pedidos/ 
 ```
 
 # 03. Empacotando e instalando a função lambda na AWS
@@ -51,7 +51,7 @@ cd ..
 ### Instalando a Função Lambda na AWS
 1. Crie uma nova função Lambda com o comando `aws lambda create-function`. Substitua `my-function`, `main.lambda_handler`, `python3.8`, e `arn:aws:iam::123456789012:role/my-role` pelos valores apropriados para o seu caso:
 ```
-aws lambda create-function --function-name gerador-pedidos-lambda --zip-file fileb://function.zip --handler lambda_function.lambda_handler --runtime python3.8 --role arn:aws:iam::123456789012:role/LabRole
+aws lambda create-function --function-name gerador-pedidos --zip-file fileb://function.zip --handler lambda_function.lambda_handler --runtime python3.8 --role arn:aws:iam::123456789012:role/LabRole
 ```
 2. Se você já tem uma função Lambda e quer atualizá-la com um novo código, use o comando aws lambda update-function-code:
 ```
