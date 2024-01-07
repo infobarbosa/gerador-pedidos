@@ -1,11 +1,11 @@
 import argparse
 import random
-import datetime
 import json
 import boto3
 import sys
 import time
 import uuid
+from datetime import datetime, timedelta
 from faker import Faker
 
 fake = Faker()
@@ -37,32 +37,51 @@ produtos = {
 
 paises = ["BR", "US", "AR"]
 
-def gerar_pedido_aleatorio():
+def gerar_pedido_aleatorio(data=None):
+    if data is None:
+        data = datetime.datetime.now()
     produto, valor_unitario = random.choice(list(produtos.items()))
     quantidade = random.randint(1, 3)
-    data_criacao = datetime.datetime.now().replace(day=random.randint(1, datetime.datetime.now().day), hour=random.randint(0, 23), minute=random.randint(0, 59), second=random.randint(0, 59))
+    data_criacao = data.replace(hour=random.randint(0, 23), minute=random.randint(0, 59), second=random.randint(0, 59))
     pais = random.choice(paises)
-    id_cliente = fake.unique.random_number(digits=5)
+    id_cliente = random.randint(1, 14000)
     return PedidoDeCompra(produto, valor_unitario, quantidade, data_criacao, pais, id_cliente)
+
+def gerar_pedidos_por_dia(inicio, fim, quantidade_por_dia):
+    data_inicio = datetime.strptime(inicio, "%d/%m/%Y")
+    data_fim = datetime.strptime(fim, "%d/%m/%Y")
+
+    data_atual = data_inicio
+    while data_atual <= data_fim:
+        data_atual_str = data_atual.strftime("%Y-%m-%d")
+        arquivo = open("pedidos-" + data_atual_str + ".txt", "w")  
+        for _ in range(quantidade_por_dia):
+            pedido = gerar_pedido_aleatorio(data_atual)
+            arquivo.write(json.dumps(pedido.to_dict()) + "\n")  
+        arquivo.close()  # fecha o arquivo
+
+        data_atual += timedelta(days=1)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--destino", default="arquivo", help="Destino dos pedidos gerados")
     parser.add_argument("--quantidade", default=50, help="Quantidade de pedidos gerados")
+    parser.add_argument("--inicio", default="01/01/2024", help="Data de início dos pedidos gerados")
+    parser.add_argument("--fim", default="31/01/2024", help="Data de fim dos pedidos gerados")
     args = parser.parse_args()
 
     print("Destino dos dados:", args.destino)
     print("Quantidade de pedidos:", args.quantidade)
+    print("Data de início:", args.inicio)
+    print("Data de fim:", args.fim)
 
     destino = args.destino.lower()
     quantidade = int(args.quantidade)
+    data_inicio = args.inicio
+    data_fim = args.fim
 
     if destino == "arquivo":
-        arquivo = open("pedidos.txt", "w")  # abre o arquivo para escrita
-        for _ in range(quantidade): 
-            pedido = gerar_pedido_aleatorio()
-            arquivo.write(json.dumps(pedido.to_dict()) + "\n")  # escreve o pedido no arquivo
-        arquivo.close()  # fecha o arquivo
+        gerar_pedidos_por_dia(data_inicio, data_fim, quantidade)
     elif destino == "kinesis":
         kinesis = boto3.client('kinesis')  
         stream_name = 'pedidos'  
