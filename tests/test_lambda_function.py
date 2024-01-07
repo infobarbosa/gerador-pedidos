@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from src.main import PedidoDeCompra, gerar_pedido_aleatorio
+from lambda_function import PedidoDeCompra, gerar_pedido_aleatorio
 
 class TestPedidoDeCompra(unittest.TestCase):
     def test_init(self):
