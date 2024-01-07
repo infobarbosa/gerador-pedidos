@@ -8,16 +8,16 @@ import uuid
 from datetime import datetime, timedelta
 from faker import Faker
 
-fake = Faker()
+fake = Faker(locale='pt_BR')
 
 class PedidoDeCompra:
-    def __init__(self, produto, valor_unitario, quantidade, data_criacao, pais, id_cliente):
-        self.id_pedido = str(uuid.uuid4())  # adiciona um identificador único a cada pedido
+    def __init__(self, produto, valor_unitario, quantidade, data_criacao, uf, id_cliente):
+        self.id_pedido = str(uuid.uuid4()) 
         self.produto = produto
         self.valor_unitario = valor_unitario
         self.quantidade = quantidade
         self.data_criacao = data_criacao.isoformat()
-        self.pais = pais
+        self.uf = uf
         self.id_cliente = id_cliente
 
     def to_dict(self):
@@ -35,17 +35,15 @@ produtos = {
     "NOTEBOOK": 1500
 }
 
-paises = ["BR", "US", "AR"]
-
 def gerar_pedido_aleatorio(data=None):
     if data is None:
         data = datetime.datetime.now()
     produto, valor_unitario = random.choice(list(produtos.items()))
     quantidade = random.randint(1, 3)
     data_criacao = data.replace(hour=random.randint(0, 23), minute=random.randint(0, 59), second=random.randint(0, 59))
-    pais = random.choice(paises)
+    uf = fake.state_abbr()
     id_cliente = random.randint(1, 14000)
-    return PedidoDeCompra(produto, valor_unitario, quantidade, data_criacao, pais, id_cliente)
+    return PedidoDeCompra(produto, valor_unitario, quantidade, data_criacao, uf, id_cliente)
 
 def gerar_pedidos_por_dia(inicio, fim, quantidade_por_dia):
     data_inicio = datetime.strptime(inicio, "%d/%m/%Y")
@@ -65,7 +63,7 @@ def gerar_pedidos_por_dia(inicio, fim, quantidade_por_dia):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--destino", default="arquivo", help="Destino dos pedidos gerados")
-    parser.add_argument("--quantidade", default=50, help="Quantidade de pedidos gerados")
+    parser.add_argument("--quantidade", default=200, help="Quantidade de pedidos gerados")
     parser.add_argument("--inicio", default="01/01/2024", help="Data de início dos pedidos gerados")
     parser.add_argument("--fim", default="31/01/2024", help="Data de fim dos pedidos gerados")
     args = parser.parse_args()
