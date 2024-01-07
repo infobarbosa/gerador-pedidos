@@ -1,3 +1,6 @@
+# Arquivo pedidos.txt gerado pelo programa gerador_pedidos.py
+pedidos.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
