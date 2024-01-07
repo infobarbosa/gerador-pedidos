@@ -74,7 +74,7 @@ def main():
                 Data=json.dumps(pedido.to_dict()),
                 PartitionKey=str(pedido.id_pedido)
             )
-            time.sleep(1)  # pausa por 1 segundo
+            time.sleep(0.1)  # pausa por 1 segundo
     else:
         print("Destino inválido")
         sys.exit(1)
