@@ -1,7 +1,7 @@
-Criado por: Prof. Marcelo Barbosa
-Criado em: Janeiro/2024
-Github: https://github.com/infobarbosa
-Linkedin: https://www.linkedin.com/in/infobarbosa/
+- Criado por: Prof. Marcelo Barbosa
+- Criado em: Janeiro/2024
+- Github: https://github.com/infobarbosa
+- Linkedin: https://www.linkedin.com/in/infobarbosa/
 
 ### Pré-requisitos
 - Os comandos a seguir presumem um ambiente e terminal ativos do AWS Cloud9.
