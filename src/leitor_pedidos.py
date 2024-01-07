@@ -21,7 +21,7 @@ def read_stream_data(shard_iterator):
         if response['Records']:
             for record in response['Records']:
                 print(record['Data'])
-        time.sleep(1)
+#        time.sleep(1) # descomente essa linha para ler os dados mais lentamente
 
 def main():
     stream_name = 'pedidos'
