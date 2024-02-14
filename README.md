@@ -48,13 +48,24 @@ cd ..
 ```
 
 ### Instalando a Função Lambda na AWS
-1. Crie uma nova função Lambda com o comando `aws lambda create-function`. Substitua `my-function`, `main.lambda_handler`, `python3.8`, e `arn:aws:iam::123456789012:role/my-role` pelos valores apropriados para o seu caso:
+1. Obtendo o ARN da role:
+> Atenção! Substitua `LabRole` pelo nome da role que você tem disponível na sua conta.
 ```
-aws lambda create-function --function-name gerador-pedidos --zip-file fileb://function.zip --handler lambda_function.lambda_handler --runtime python3.8 --role arn:aws:iam::123456789012:role/LabRole
+export LAB_ROLE=$(aws iam get-role --role-name LabRole | jq '.Role.Arn' -r)
 ```
-2. Se você já tem uma função Lambda e quer atualizá-la com um novo código, use o comando aws lambda update-function-code:
+
 ```
-aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip
+echo $LAB_ROLE
+```
+
+2. Crie uma nova função Lambda com o comando `aws lambda create-function`:
+```
+aws lambda create-function --function-name gerador-pedidos --zip-file fileb://function.zip --handler lambda_function.lambda_handler --runtime python3.8 --role $LAB_ROLE
+```
+
+3. Se você já tem uma função Lambda e quer atualizá-la com um novo código, use o comando aws lambda update-function-code:
+```
+aws lambda update-function-code --function-name gerador-pedidos --zip-file fileb://function.zip
 ```
 
 Agora, sua função Lambda está pronta para ser usada na AWS.
