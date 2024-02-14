@@ -31,7 +31,7 @@ aws lambda create-function \
     --function-name gerador-pedidos \
     --zip-file fileb://function.zip \
     --handler lambda_function.lambda_handler \
-    --runtime python3.8 \
+    --runtime python3.12 \
     --role $LAB_ROLE
 
 echo "07. Invocando a função Lambda"
