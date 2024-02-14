@@ -60,7 +60,13 @@ echo $LAB_ROLE
 
 2. Crie uma nova função Lambda com o comando `aws lambda create-function`:
 ```
-aws lambda create-function --function-name gerador-pedidos --zip-file fileb://function.zip --handler lambda_function.lambda_handler --runtime python3.12 --role $LAB_ROLE
+aws lambda create-function \
+    --function-name gerador-pedidos \
+    --zip-file fileb://function.zip \
+    --handler lambda_function.lambda_handler \
+    --runtime python3.12 \
+    --role $LAB_ROLE \
+    --timeout 900
 ```
 
 3. Se você já tem uma função Lambda e quer atualizá-la com um novo código, use o comando aws lambda update-function-code:
