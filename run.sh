@@ -22,15 +22,19 @@ cp src/lambda_function.py ./package/
 echo "04. Empacotando o código e as dependências em um arquivo ZIP"
 zip -r ./function.zip ./package/*	
 
-echo "05. Instalando a Função Lambda na AWS"
+echo "05. Obtendo o ARN da role"
+export LAB_ROLE=$(aws iam get-role --role-name LabRole | jq '.Role.Arn' -r)
+echo "ARN da role: " $LAB_ROLE
+
+echo "06. Instalando a Função Lambda na AWS"
 aws lambda create-function \
     --function-name gerador-pedidos \
     --zip-file fileb://function.zip \
     --handler lambda_function.lambda_handler \
     --runtime python3.8 \
-    --role arn:aws:iam::123456789012:role/LabRole
+    --role $LAB_ROLE
 
-echo "06. Invocando a função Lambda"
+echo "07. Invocando a função Lambda"
 aws lambda invoke --function-name gerador-pedidos out.json
 
 echo "Lambda invocada com sucesso!"
