@@ -30,5 +30,7 @@ aws lambda create-function \
     --runtime python3.8 \
     --role arn:aws:iam::123456789012:role/LabRole
 
-echo "06. Executando a função Lambda"
+echo "06. Invocando a função Lambda"
 aws lambda invoke --function-name gerador-pedidos out.json
+
+echo "Lambda invocada com sucesso!"
