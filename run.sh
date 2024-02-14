@@ -12,14 +12,14 @@ aws kinesis create-stream --stream-name pedidos --shard-count 1
 
 
 echo "02. Empacotando a Função Lambda"
+rm -rf package
+mkdir -p package
 pip install -r requirements.txt -t ./package
-
 
 echo "03. Copiando o código da função Lambda para o diretório package"
 cp src/lambda_function.py ./package/
 
 echo "04. Empacotando o código e as dependências em um arquivo ZIP"
-cd package
 zip -r ./function.zip ./package/*	
 
 echo "05. Instalando a Função Lambda na AWS"
